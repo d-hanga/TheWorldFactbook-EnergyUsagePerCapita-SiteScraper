@@ -3,7 +3,7 @@ import requests
 import pycountry
 from tqdm import tqdm
 
-def complete_number(number:str):
+def complete_number(number:str) -> int:
     if number == "thousand":
         return 1000
     if number == "million":
@@ -15,6 +15,8 @@ def complete_number(number:str):
     else:
         return 1
 
+def makefloat(string:str) -> float:
+    return float(string.replace(",", ""))
 
 class EnegryUsagePerCapita():
     def __init__(self, countries:iter=list(pycountry.countries)) -> None:
@@ -33,7 +35,7 @@ class EnegryUsagePerCapita():
                 except IndexError as e:
                     failed[country.name] = e
                 else:
-                    result[country.name] = float(splited[0])*complete_number(splited[1])/3412
+                    result[country.name] = makefloat(splited[0])*complete_number(splited[1])/3412
         self.failed = failed
         self.result = result
         return {"result":result, "failed":failed}
